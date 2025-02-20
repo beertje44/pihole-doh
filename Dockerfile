@@ -1,25 +1,11 @@
-FROM pihole/pihole
+FROM docker.io/pihole/pihole
 
-MAINTAINER ali azam <ali@azam.email>
+MAINTAINER Jeroen Beerstra <jeroen@beerstra.org>
 
-EXPOSE 53:53/tcp 53:53/udp 67:67/udp 80:80/tcp
-
-RUN apt-get update \
-    && apt-get -y install wget \
-    && rm -rf /var/lib/apt/lists/*
+RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/bin/cloudflared
+RUN chmod 0755 /usr/bin/cloudflared
     
-RUN wget https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-    
-RUN apt-get install ./cloudflared-linux-amd64.deb \
-    && mkdir -p /etc/cloudflared/ \
-    && mkdir -p /etc/s6-overlay/s6-rc.d/cloudflared/dependencies.d \
-    && touch /etc/s6-overlay/s6-rc.d/cloudflared/type \
-    && touch /etc/s6-overlay/s6-rc.d/cloudflared/run \
-    && touch /etc/s6-overlay/s6-rc.d/cloudflared/dependencies.d/base \
-    && touch /etc/s6-overlay/s6-rc.d/user/contents.d/cloudflared \
-    && echo 'longrun' >> /etc/s6-overlay/s6-rc.d/cloudflared/type \
-    && echo -e '#!/command/with-contenv bash\ncloudflared' >> /etc/s6-overlay/s6-rc.d/cloudflared/run
-
 COPY ./config.yml /etc/cloudflared/config.yml
+COPY --chmod=0755 ./start.sh /usr/bin/start.sh
 
-ENTRYPOINT /s6-init
+ENTRYPOINT ["start.sh"]
