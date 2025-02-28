@@ -56,10 +56,10 @@ start() {
   fix_capabilities
   sh /opt/pihole/pihole-FTL-prestart.sh
 
-  echo " [i] Starting cloudflared (/usr/bin/cloudflared) as ${DNSMASQ_USER}"
+  echo "  [i] Starting cloudflared (/usr/bin/cloudflared) as ${CLOUDFLARE_USER}"
   echo ""
 
-  capsh --user="${DNSMASQ_USER}" --keep=1 -- -c "/usr/bin/cloudflared >/dev/null" &
+  capsh --user="${CLOUDFLARE_USER}" --keep=1 -- -c "/usr/bin/cloudflared >/dev/null" &
 
   echo "  [i] Starting pihole-FTL ($FTL_CMD) as ${DNSMASQ_USER}"
   echo ""
