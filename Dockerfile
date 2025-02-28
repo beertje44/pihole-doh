@@ -4,7 +4,8 @@ LABEL maintainer="Jeroen Beerstra <jeroen@beerstra.org>"
 
 ARG CLOUDFLARE_UID=1001
 ARG CLOUDFLARE_GID=1001
-ARG CLOUDFLARE_USER=cloudflare
+
+ENV CLOUDFLARE_USER=cloudflare
 
 RUN curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o /usr/bin/cloudflared \
   && chmod 0755 /usr/bin/cloudflared \
